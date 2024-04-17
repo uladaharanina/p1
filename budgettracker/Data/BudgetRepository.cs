@@ -14,7 +14,8 @@ public class BudgetRepository
         _dbContext = context;
     }
 
-    /*--------EXPENSES-------*/
+    /*--------EXPENSES-------------
+    -----------------------------*/
 
     // List all expenses
     public IEnumerable<Expenses> ListExpenses(){
@@ -34,21 +35,65 @@ public class BudgetRepository
 
         public void DeleteExpense(Expenses expense)
     {
-        _dbContext.Expenses.Add(expense);
-        _dbContext.SaveChanges();
+            _dbContext.Expenses.Remove(expense);
+            _dbContext.SaveChanges();
     }
 
     //Update expense
 
+        public void UpdateExpense(Expenses expense)
+    {   
+        
+        _dbContext.Expenses.Update(expense);
+        _dbContext.SaveChanges();
+    }
 
-    /*--------INCOME-------*/
+    //Get expense by id
+    public Expenses GetExpenseById(Expenses expense)
+    {
+        return _dbContext.Expenses.Find(expense.ExpenseId);
+    }
 
 
-    /*--------INCOME TYPES-------*/
+    /*--------INCOME----------------------
+    -----------------------------------*/
 
+   // List all income
+    public IEnumerable<Income> ListIncome(){
 
-    /*--------EXPENSE TYPES-------*/
+        return _dbContext.Income.ToList();
+    }
 
+    // Add expense
+    public Income AddIncome(Income income)
+    {   
+            _dbContext.Income.Add(income);
+            _dbContext.SaveChanges();
+            return income;
+    }
+
+    // Delete expense
+
+        public void DeleteIncome(Income income)
+    {
+            _dbContext.Income.Remove(income);
+            _dbContext.SaveChanges();
+    }
+
+    //Update expense
+
+        public void UpdateIncome(Income income)
+    {   
+        
+        _dbContext.Income.Update(income);
+        _dbContext.SaveChanges();
+    }
+
+    //Get expense by id
+    public Income GetIncomeById(Income income)
+    {
+        return _dbContext.Income.Find(income.IncomeId);
+    }
 
 
 

@@ -9,12 +9,7 @@ public class BudgetContext : DbContext
     private readonly IConfiguration _configuration; // contains connection string
 
     public DbSet<Income> ? Income { get; set; }
-    public DbSet<Income_types> ? Income_types { get; set; }
-
     public DbSet<Expenses> ? Expenses { get; set; }
-
-    public DbSet<Expenses_types> ? Expenses_types { get; set; }
-
 
 
     public BudgetContext(DbContextOptions<BudgetContext> options, IConfiguration configuration) : base(options){
