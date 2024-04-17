@@ -50,7 +50,9 @@ public class IncomeController: Controller
 
         //Find id of the expense
         Income incomeToUpdate = repo.GetIncomeById(income);
-
+        if(incomeToUpdate == null){
+            return NotFound("Income not found");
+        }
         //Update values
         incomeToUpdate.Name = income.Name;
         incomeToUpdate.Amount = income.Amount;

@@ -53,20 +53,27 @@ public class ExpenseController: Controller
 
         //Find id of the expense
         Expenses expenseToUpdate = repo.GetExpenseById(expense);
-
+        if(expenseToUpdate != null){
         //Update values
-        expenseToUpdate.Amount = expense.Amount;
-        expenseToUpdate.Name = expense.Name;
-        expenseToUpdate.Type = expense.Type;
+                expenseToUpdate.Amount = expense.Amount;
+                expenseToUpdate.Name = expense.Name;
+                expenseToUpdate.Type = expense.Type;
 
-         if(ModelState.IsValid)
-        {
-            repo.UpdateExpense(expenseToUpdate);
-            return CreatedAtAction(nameof(UpdateExpense), new { id = expenseToUpdate.ExpenseId }, expenseToUpdate);
+                if(ModelState.IsValid)
+                {
+                    repo.UpdateExpense(expenseToUpdate);
+                    return CreatedAtAction(nameof(UpdateExpense), new { id = expenseToUpdate.ExpenseId }, expenseToUpdate);
+                }
+                else{
+                    return BadRequest(ModelState);
+                }
         }
         else{
-            return BadRequest(ModelState);
+                return NotFound("Expense not found");
+
         }
+
+       
     }
 
     /*---------DELETE NEW EXPENSE----------*/
