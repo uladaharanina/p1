@@ -133,9 +133,9 @@ public class UnitTest1
     [InlineData("Groceries", "%^NoName", 567.00, false)]
     [InlineData("Groceries", "Food", -567.00, false)] 
 
-    public void TestTypeInput(string type, bool expectedResult){
+    public void TestTypeInput(string name, bool expectedResult){
 
-        Assert.Equal(expectedResult, Validator.ValidateType(type));
+        Assert.Equal(expectedResult, Validator.ValidateAll(type));
         Assert.Equal(expectedResult, Validator.ValidateType(type));
 
     }

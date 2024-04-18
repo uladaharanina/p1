@@ -22,6 +22,14 @@
   - Status Code: 400 Bad Request
   - Body: Error message if the expense could not be added.
 
+  Example:
+  ```
+        "name": "Car Payment",
+        "type": "Loan",
+        "amount": 230,
+        "date": "2022-04-18T00:00:00"
+  ```
+
 ### Update Expense
 
 - **Route:** `PUT /api/Expense`
@@ -33,6 +41,15 @@
 - **Error Response:**
   - Status Code: 400 Bad Request
   - Body: Error message if the expense could not be updated.
+
+  
+  Example:
+  ```
+        "expenseId": 5,
+        "name": "New Name",
+        "type": "New Type",
+        "amount": 56.00,
+  ```
 
 ### Delete Expense
 
@@ -46,6 +63,13 @@
   - Status Code: 400 Bad Request
   - Body: Error message if the expense could not be deleted.
 
+  Example:
+  ```
+        "expenseId": 5,
+        "name": "Car Payment",
+        "type": "Loan",
+        "amount": 230,
+  ```
 
 ## Income Controller API Routes
 
@@ -69,6 +93,15 @@
   - Status Code: 400 Bad Request
   - Body: Error message if the income record could not be added.
 
+  ```
+      {
+        "name": "Apex",
+        "type": "Salary",
+        "amount": 5456,
+        "date": "2022-04-18T00:00:00"
+    }
+  ```
+
 ### Update Income
 
 - **Route:** `PUT /api/Income`
@@ -80,6 +113,17 @@
 - **Error Response:**
   - Status Code: 400 Bad Request
   - Body: Error message if the income record could not be updated.
+
+  ```
+      {
+        "incomeId": 1,
+        "name": "New Name",
+        "type": "Salary",
+        "amount": 5456,
+        "date": "2022-04-18T00:00:00"
+    }
+
+  ```
 
 ### Delete Income
 
@@ -93,6 +137,16 @@
   - Status Code: 400 Bad Request
   - Body: Error message if the income record could not be deleted.
 
+
+```
+      {
+        "incomeId": 1,
+        "name": "New Name",
+        "type": "Salary",
+        "amount": 5456,
+        "date": "2022-04-18T00:00:00"
+    }
+```
 
 ## Budget Controller API Routes
 
