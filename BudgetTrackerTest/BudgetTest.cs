@@ -89,6 +89,167 @@ public class UnitTest1
         repo.Verify(repo => repo.List(), Times.Exactly(1));
     }
 
+
+    [Theory]
+    [InlineData("Walmart", "Groceries", 150.00, "Walmart")]
+    [InlineData("", "Groceries", 150.00, null)]
+    [InlineData("Walmart", "", 150.00, null)]
+    [InlineData("Walmart", "Groceries", -150.00, null)]
+    //Add new expense
+    public void AddExpenseTest(string name, string type, double amount, string expectedName){
+        //Arrange
+        Mock <IRepository<Expenses>> repo = new Mock<IRepository<Expenses>>();
+         //Create fake data 
+        Expenses newExpense = new Expenses{
+                Name = name,
+                Type = type,
+                Amount = amount,
+                Date = DateTime.Now
+        };
+
+        repo.Setup(repo => repo.Add(newExpense)).Returns(newExpense);
+        ExpensesService service = new ExpensesService(repo.Object);
+
+        //Act
+        Expenses addnewExpense = service.AddItem(newExpense);
+
+        if(string.IsNullOrEmpty(expectedName)){
+            Assert.Null(addnewExpense);
+        }
+        else{
+            Assert.Equal(expectedName, addnewExpense.Name);
+            repo.Verify(repo => repo.Add(newExpense), Times.Exactly(1));
+        }
+        
+    }
+
+
+
+    //Add new income
+
+    [Theory]
+    [InlineData("Building a house", "Side gig", 15000.00, "Building a house")]
+    [InlineData("", "Side gig", 15000.00, null)]
+    [InlineData("Building a house", "", 15000.00, null)]
+    [InlineData("Building a house", "Side gig", -15000.00, null)]
+    public void AddIncomeTest(string name, string type, double amount, string expectedName){
+        //Arrange
+        Mock <IRepository<Income>> repo = new Mock<IRepository<Income>>();
+         //Create fake data 
+        Income newIncome = new Income{
+                Name = name,
+                Type = type,
+                Amount = amount,
+                Date = DateTime.Now
+        };
+
+        repo.Setup(repo => repo.Add(newIncome)).Returns(newIncome);
+        IncomeService service = new IncomeService(repo.Object);
+
+        //Act
+        Income addnewIncome = service.AddItem(newIncome);
+
+        if(string.IsNullOrEmpty(expectedName)){
+            Assert.Null(addnewIncome);
+        }
+        else{
+            Assert.Equal(expectedName, addnewIncome.Name);
+            repo.Verify(repo => repo.Add(newIncome), Times.Exactly(1));
+        }
+        
+    }
+    
+    
+    //Edit expense
+    [Theory]
+    [InlineData(1, "Walmart", "Groceries", 150.00, "Walmart")]
+    [InlineData(null,"", "Groceries", 150.00, null)]
+    [InlineData(1,"Walmart", "", 150.00, null)]
+    [InlineData(1, "Walmart", "Groceries", -150.00, null)]
+    [InlineData(10, "Walmart", "Groceries", 150.00, null)]
+
+    public void EditExpenseTest(int id, string name, string type, double amount, string expectedName){
+        //Arrange
+        Mock <IRepository<Expenses>> repo = new Mock<IRepository<Expenses>>();
+         //Create fake data 
+        Expenses currentExpense = new Expenses{
+                ExpenseId = 1,
+                Name = "My Expenses",
+                Type = "None",
+                Amount = 45.00,
+                Date = DateTime.Now
+        };
+
+        repo.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => id == currentExpense.ExpenseId ? currentExpense : null);
+        ExpensesService service = new ExpensesService(repo.Object);
+
+        Expenses ExpenseToUpdate = new Expenses{
+                ExpenseId = id,
+                Name = name,
+                Type = type,
+                Amount = amount
+        };
+
+        //Act
+        Expenses updateExpense = service.UpdateItem(ExpenseToUpdate);
+
+        if(string.IsNullOrEmpty(expectedName)){
+            Assert.Null(updateExpense);
+        }
+        else{
+            Assert.Equal(expectedName, updateExpense.Name);
+            repo.Verify(repo => repo.Update(It.IsAny<Expenses>()), Times.Exactly(1));
+        }
+        
+    }
+    //Edit income
+    [Theory]
+    [InlineData(1, "Google", "Stocks", 150.00, "Google")]
+    [InlineData(null,"", "Stocks", 150.00, null)]
+    [InlineData(1,"Google", "", 150.00, null)]
+    [InlineData(1, "Google", "Stocks", -150.00, null)]
+    [InlineData(10, "Google", "Stocks", 150.00, null)]
+    public void EditIncomeTest(int id, string name, string type, double amount, string expectedName){
+          //Arrange
+        Mock <IRepository<Income>> repo = new Mock<IRepository<Income>>();
+         //Create fake data 
+        Income currentIncome = new Income{
+                IncomeId = 1,
+                Name = "My Income",
+                Type = "None",
+                Amount = 405.00,
+                Date = DateTime.Now
+        };
+
+        repo.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => id == currentIncome.IncomeId ? currentIncome : null);
+        IncomeService service = new IncomeService(repo.Object);
+
+        Income IncomeToUpdate = new Income{
+                IncomeId = id,
+                Name = name,
+                Type = type,
+                Amount = amount
+        };
+
+        //Act
+        Income updateIncome = service.UpdateItem(IncomeToUpdate);
+
+        if(string.IsNullOrEmpty(expectedName)){
+            Assert.Null(updateIncome);
+        }
+        else{
+            Assert.Equal(expectedName, updateIncome.Name);
+            repo.Verify(repo => repo.Update(It.IsAny<Income>()), Times.Exactly(1));
+        }
+    }
+
+    //Delete expense
+
+    //Delete income
+
+    //Display Summary
+
+
     //Test summary information
     [Theory]
     [InlineData(50, true)]
@@ -133,10 +294,14 @@ public class UnitTest1
     [InlineData("Groceries", "%^NoName", 567.00, false)]
     [InlineData("Groceries", "Food", -567.00, false)] 
 
-    public void TestTypeInput(string name, bool expectedResult){
+    public void TestAllInput(string name, string type, double amount, bool expectedResult){
 
-        Assert.Equal(expectedResult, Validator.ValidateAll(type));
-        Assert.Equal(expectedResult, Validator.ValidateType(type));
+        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
+        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
+        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
+        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
+        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
+
 
     }
 }

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 public static class Validator
 {
     public static bool ValidateName(string name){
-        if(Regex.IsMatch(name, @"[!@#$%^&*]")){
+        if(Regex.IsMatch(name, @"[!@#$%^&*]") || name == "" || name == null){
             return false;
         }
         else{
@@ -13,7 +13,7 @@ public static class Validator
     }
 
     public static bool ValidateType(string type){
-        if(Regex.IsMatch(type, @"[!@#$%^&*]")){
+        if(Regex.IsMatch(type, @"[!@#$%^&*]") || type == "" || type == null){
             return false;
         }
         else{

@@ -38,13 +38,13 @@ public class ExpensesService : IBudgetService<Expenses>
     public Expenses? UpdateItem(Expenses data){
            Expenses ExpenseToUpdate = _ExpensesRepository.GetById(data.ExpenseId);
             if(ExpenseToUpdate != null){
-            if(Validator.ValidateAll(data.Name, data.Type, data.Amount)){
-                ExpenseToUpdate.Amount = data.Amount;
-                ExpenseToUpdate.Name = data.Name;
-                ExpenseToUpdate.Type = data.Type;
-                _ExpensesRepository.Update(ExpenseToUpdate);
-                return ExpenseToUpdate;
-            }
+                if(Validator.ValidateAll(data.Name, data.Type, data.Amount)){
+                    ExpenseToUpdate.Amount = data.Amount;
+                    ExpenseToUpdate.Name = data.Name;
+                    ExpenseToUpdate.Type = data.Type;
+                    _ExpensesRepository.Update(ExpenseToUpdate);
+                    return ExpenseToUpdate;
+                }
             }
 
             return null;
