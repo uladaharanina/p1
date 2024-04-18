@@ -123,8 +123,6 @@ public class UnitTest1
         
     }
 
-
-
     //Add new income
 
     [Theory]
@@ -244,13 +242,147 @@ public class UnitTest1
     }
 
     //Delete expense
+    [Theory]
+    [InlineData(1, true)]
+    [InlineData(2, false)]
+    public void TestDeleteExpense(int id, bool expectedResult){
+
+        Mock <IRepository<Expenses>> repo = new Mock<IRepository<Expenses>>();
+
+        Expenses currentExpense = new Expenses{
+                ExpenseId = 1,
+                Name = "My Expenses",
+                Type = "None",
+                Amount = 45.00,
+                Date = DateTime.Now
+        };
+
+        Expenses ExpensetoDelete = new Expenses{
+                ExpenseId = id,
+                Name = "My Expenses",
+                Type = "None",
+                Amount = 45.00,
+                Date = DateTime.Now
+        };
+
+        repo.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => id == currentExpense.ExpenseId ? currentExpense : null);
+        ExpensesService service = new ExpensesService(repo.Object);
+
+        //Act
+        bool result = service.DeleteItem(ExpensetoDelete);
+        Assert.Equal(expectedResult, result);
+        repo.Verify(repo => repo.Delete(It.IsAny<Expenses>()), expectedResult ? Times.Once() : Times.Never());
+
+    }
 
     //Delete income
+    [Theory]
+    [InlineData(1, true)]
+    [InlineData(2, false)]
+    public void TestDeleteIncome(int id, bool expectedResult){
 
+        Mock <IRepository<Income>> repo = new Mock<IRepository<Income>>();
+
+        Income currentIncome = new Income{
+                IncomeId = 1,
+                Name = "My Income",
+                Type = "None",
+                Amount = 45.00,
+                Date = DateTime.Now
+        };
+
+        Income IncometoDelete = new Income{
+                IncomeId = id,
+                Name = "My Expenses",
+                Type = "None",
+                Amount = 45.00,
+                Date = DateTime.Now
+        };
+
+        repo.Setup(repo => repo.GetById(It.IsAny<int>())).Returns<int>(id => id == currentIncome.IncomeId ? currentIncome : null);
+        IncomeService service = new IncomeService(repo.Object);
+
+        //Act
+        bool result = service.DeleteItem(IncometoDelete);
+        Assert.Equal(expectedResult, result);
+        repo.Verify(repo => repo.Delete(It.IsAny<Income>()), expectedResult ? Times.Once() : Times.Never());
+
+    }
     //Display Summary
 
+    [Fact]
+    public void TestSummaryInformation(){
 
-    //Test summary information
+        Mock <IRepository<Expenses>> ExpenseRepo = new Mock<IRepository<Expenses>>();
+        Mock <IRepository<Income>> IncomeRepo = new Mock<IRepository<Income>>();
+
+        Expenses currentExpense = new Expenses{
+                ExpenseId = 1,
+                Name = "Car Payment",
+                Type = "Loan",
+                Amount = 145.00,
+                Date = DateTime.Now
+        };
+
+        Income currentIncome = new Income{
+                IncomeId = 1,
+                Name = "Google",
+                Type = "Salary",
+                Amount = 1045.00,
+                Date = DateTime.Now
+        };
+
+        ExpenseRepo.Setup(repo => repo.List()).Returns(new List<Expenses> {currentExpense});
+        IncomeRepo.Setup(repo => repo.List()).Returns(new List<Income> {currentIncome});
+
+        SummaryService service = new SummaryService(ExpenseRepo.Object, IncomeRepo.Object);
+
+        Dictionary<string,string> result = service.GetSummary();
+        string expectedTotal = "900";
+        Assert.Equal(expectedTotal, result["Profit"]);
+    }
+
+
+    //Test types
+    [Fact]
+    public void TestGetExpensesCategories(){
+
+        Mock <IRepository<Expenses>> ExpenseRepo = new Mock<IRepository<Expenses>>();
+        Mock <IRepository<Income>> IncomeRepo = new Mock<IRepository<Income>>();
+
+
+          IEnumerable<Expenses>  currentExpense = [
+            
+            new Expenses {
+                ExpenseId = 1,
+                Name = "Car Payment",
+                Type = "Loan",
+                Amount = 145.00,
+                Date = DateTime.Now
+                },
+
+            new Expenses  {
+                ExpenseId = 2,
+                Name = "House Payment",
+                Type = "Loan",
+                Amount = 1450.00,
+                Date = DateTime.Now
+                }
+        ];
+               
+
+        ExpenseRepo.Setup(repo => repo.List()).Returns(currentExpense);
+
+        SummaryService service = new SummaryService(ExpenseRepo.Object, IncomeRepo.Object);
+
+        Dictionary<string, string> result = service.GetExpensesCategories();
+        string expectedSum = "1595";
+        Assert.Equal(expectedSum, result["Loan"]);
+
+    }
+
+
+
     [Theory]
     [InlineData(50, true)]
     [InlineData(-50, false)] 
