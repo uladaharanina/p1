@@ -1,7 +1,9 @@
+using System.Text.RegularExpressions;
+
 public static class Validator
 {
     public static bool ValidateName(string name){
-        if(name == null || name.Length == 0 || name == ""){
+        if(Regex.IsMatch(name, @"[!@#$%^&*]")){
             return false;
         }
         else{
@@ -11,7 +13,7 @@ public static class Validator
     }
 
     public static bool ValidateType(string type){
-        if(type == null || type.Length == 0 || type == ""){
+        if(Regex.IsMatch(type, @"[!@#$%^&*]")){
             return false;
         }
         else{
@@ -28,6 +30,8 @@ public static class Validator
            return true;
         }
     }
+
+
     public static bool ValidateAll(string name, string type, double amount){
 
         if(ValidateName(name) && ValidateType(type) && ValidateAmount(amount)){

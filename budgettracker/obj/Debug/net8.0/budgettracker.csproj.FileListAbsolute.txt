@@ -160,3 +160,5 @@ F:\reva_2024PROJECTS\p1\budgettracker\bin\Debug\net8.0\Swashbuckle.AspNetCore.Sw
 F:\reva_2024PROJECTS\p1\budgettracker\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 F:\reva_2024PROJECTS\p1\budgettracker\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 F:\reva_2024PROJECTS\p1\budgettracker\obj\Debug\net8.0\budgettracker.MvcApplicationPartsAssemblyInfo.cs
+F:\reva_2024PROJECTS\p1\budgettracker\bin\Debug\net8.0\Castle.Core.dll
+F:\reva_2024PROJECTS\p1\budgettracker\bin\Debug\net8.0\Moq.dll
