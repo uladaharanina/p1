@@ -24,7 +24,7 @@ public class SummaryService : ISummaryService{
             double profit = totalIncome - totalExpense;
             double HighestSpending = myExpenses.Max(expense => expense.Amount);
 
-            summary.Add("Total Income", totalIncome.ToString());
+            summary.Add("Total Income", totalIncome.ToString("0.00"));
             summary.Add("Highest Earnings", HighestEarnings.ToString());
             summary.Add("Total Expenses", myExpenses.Sum(expense => expense.Amount).ToString());
             summary.Add("Highest Spending",HighestSpending.ToString());
