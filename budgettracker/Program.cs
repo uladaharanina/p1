@@ -14,10 +14,10 @@ builder.Services.AddDbContext<BudgetContext>(options => options.UseSqlServer(con
 builder.Services.AddControllers();
 
 // Add budget repository and service
-builder.Services.AddScoped<IRepository<Expenses>,ExpenseRepo>();
-builder.Services.AddScoped<IRepository<Income>,IncomeRepo>();
+builder.Services.AddScoped<IRepository<Expenses>, ExpenseRepo>();
+builder.Services.AddScoped<IRepository<Income>, IncomeRepo>();
 
-
+builder.Services.AddScoped<SummaryService>();
 builder.Services.AddScoped<ExpensesService>();
 builder.Services.AddScoped<IncomeService>();
 
