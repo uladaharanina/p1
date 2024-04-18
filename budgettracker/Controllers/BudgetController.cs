@@ -32,3 +32,5 @@ public class BudgetController : Controller
      return Json(_service.GetIncomeCategories());
     }
 }
+
+
