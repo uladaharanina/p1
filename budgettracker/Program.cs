@@ -13,8 +13,14 @@ var connectionString = builder.Configuration["dbconnectionstring"];
 builder.Services.AddDbContext<BudgetContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddControllers();
 
-// Add budget repository
-builder.Services.AddScoped<BudgetRepository>();
+// Add budget repository and service
+builder.Services.AddScoped<IRepository<Expenses>,ExpenseRepo>();
+builder.Services.AddScoped<IRepository<Income>,IncomeRepo>();
+
+
+builder.Services.AddScoped<ExpensesService>();
+builder.Services.AddScoped<IncomeService>();
+
 
 var app = builder.Build();
 

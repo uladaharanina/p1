@@ -10,35 +10,32 @@ namespace budgettracker.Controllers;
 [Route("api/[controller]")]
 public class IncomeController: Controller
 {
-    //Inject repo
-    private readonly BudgetRepository repo;
+    //Inject Service
+    private readonly IncomeService service;
 
-    public IncomeController(BudgetRepository repo)
+    public IncomeController(IncomeService service)
     {
-        this.repo = repo;
+        this.service = service;
     }
 
     /*---------LIST ALL INCOME----------*/
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IEnumerable<Income> GetIncome(){
-       return repo.ListIncome();
+       return service.ListItems();
     }
-
 
     /*---------ADD NEW INCOME----------*/
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public IActionResult AddIncome(Income income){
-
-        if(ModelState.IsValid)
-        {
-            repo.AddIncome(income);
-            return CreatedAtAction(nameof(AddIncome), new { id = income.IncomeId }, income);
+        Income result = service.AddItem(income);
+        if(result!= null){
+            return CreatedAtAction(nameof(AddIncome), new { id = result.IncomeId }, result);
         }
         else{
-            return BadRequest(ModelState);
+            return BadRequest("Could not add new income");
         }
     }
 
@@ -47,25 +44,14 @@ public class IncomeController: Controller
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     public ActionResult UpdateIncome(Income income){
-
-        //Find id of the expense
-        Income incomeToUpdate = repo.GetIncomeById(income);
-        if(incomeToUpdate == null){
-            return NotFound("Income not found");
-        }
-        //Update values
-        incomeToUpdate.Name = income.Name;
-        incomeToUpdate.Amount = income.Amount;
-        incomeToUpdate.Type = income.Type;
-
-         if(ModelState.IsValid)
-        {
-            repo.UpdateIncome(incomeToUpdate);
-            return CreatedAtAction(nameof(UpdateIncome), new { id = incomeToUpdate.IncomeId }, incomeToUpdate);
+        Income result = service.UpdateItem(income);
+        if(result!= null){
+            return CreatedAtAction(nameof(UpdateIncome), new { id = result.IncomeId }, result);
         }
         else{
-            return BadRequest(ModelState);
+            return BadRequest("Could not edit the selected income");
         }
+
     }
 
     /*---------DELETE INCOME----------*/
@@ -73,48 +59,14 @@ public class IncomeController: Controller
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<string> DeleteIncome(Income income){
- //Find id of the expense
-        Income incomeToDelete = repo.GetIncomeById(income);
-        if(incomeToDelete != null){
-            repo.DeleteIncome(incomeToDelete);
-            return $"Income {income.Name} was deleted";
+        bool result = service.DeleteItem(income);
+        if(result == true){
+            return Ok("The selected income was deleted");
         }
         else{
-            return $"Income does not exist";
+            return BadRequest("Could not delete the selected income");
         }
     }
 
 
-    /*-----------SUMAMRY EXPENSES-----------*/
-
-    [HttpGet("total-income")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<object> GetTotalIncome(){
-        
-        //Get all income and
-        IEnumerable<Income> myIncome = repo.ListIncome();
-
-        double totalIncome = myIncome.Sum(income => income.Amount);
-        double HighestEarnings = myIncome.Max(income => income.Amount);
-
-        var categoryIncomes =  myIncome
-                .GroupBy(income => income.Type)
-                .Select(group => new
-                {
-                    Type = group.Key,
-                    typetotal = group.Sum(income => income.Amount)
-                });
-
-        var BiggestSourceOfProfit = categoryIncomes.OrderByDescending(income => income.typetotal).FirstOrDefault()?.Type;
-
-
-
-        var incomeSummary = new {
-            TotalIncome = "$" + totalIncome.ToString(),
-            BiggestSourceOfProfit = BiggestSourceOfProfit,
-            HighestEarnings = HighestEarnings
-            };
-
-        return Json(incomeSummary);
-    }
 }

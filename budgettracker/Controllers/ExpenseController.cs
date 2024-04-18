@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Encodings.Web;
 using budgettracker.data;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace budgettracker.Controllers;
 
@@ -11,20 +12,21 @@ namespace budgettracker.Controllers;
 public class ExpenseController: Controller
 {
     //Inject repo
-    private readonly BudgetRepository repo;
+    //private readonly BudgetRepository repo;
+//Inject Service
+    private readonly ExpensesService service;
 
-    public ExpenseController(BudgetRepository repo)
+    public ExpenseController(ExpensesService service)
     {
-        this.repo = repo;
+        this.service = service;
     }
 
     /*---------LIST ALL EXPENSES----------*/
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public IEnumerable<Expenses> GetExpenses(){
-        //return "TEST";
 
-       return repo.ListExpenses();
+       return service.ListItems();
     }
 
 
@@ -34,46 +36,26 @@ public class ExpenseController: Controller
     [ProducesResponseType(StatusCodes.Status201Created)]
     public IActionResult  AddExpense(Expenses expense){
 
-        if(ModelState.IsValid)
-        {
-            repo.AddExpense(expense);
-            return CreatedAtAction(nameof(AddExpense), new { id = expense.ExpenseId }, expense);
+        Expenses result = service.AddItem(expense);
+        if(result!= null){
+            return CreatedAtAction(nameof(AddExpense), new { id = result.ExpenseId }, result);
         }
         else{
-            return BadRequest(ModelState);
-        }
-    }
+            return BadRequest("Could not add new expense");
+        }    }
 
         /*---------UPDATE NEW EXPENSE----------*/
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
-
     public ActionResult UpdateExpense(Expenses expense){
-
-        //Find id of the expense
-        Expenses expenseToUpdate = repo.GetExpenseById(expense);
-        if(expenseToUpdate != null){
-        //Update values
-                expenseToUpdate.Amount = expense.Amount;
-                expenseToUpdate.Name = expense.Name;
-                expenseToUpdate.Type = expense.Type;
-
-                if(ModelState.IsValid)
-                {
-                    repo.UpdateExpense(expenseToUpdate);
-                    return CreatedAtAction(nameof(UpdateExpense), new { id = expenseToUpdate.ExpenseId }, expenseToUpdate);
-                }
-                else{
-                    return BadRequest(ModelState);
-                }
-        }
-        else{
-                return NotFound("Expense not found");
-
-        }
-
-       
+        Expenses result = service.UpdateItem(expense);
+            if(result != null){
+                return CreatedAtAction(nameof(UpdateExpense), new { id = result.ExpenseId }, result);
+            }
+            else{                    
+                return BadRequest("Could not edit the selected income");
+            }
     }
 
     /*---------DELETE NEW EXPENSE----------*/
@@ -81,55 +63,13 @@ public class ExpenseController: Controller
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<string> DeleteExpense(Expenses expense){
- //Find id of the expense
-        Expenses expenseToDelete = repo.GetExpenseById(expense);
-        if(expenseToDelete != null){
-            repo.DeleteExpense(expenseToDelete);
-            return $"Expense {expense.Name} was deleted";
+        bool result = service.DeleteItem(expense);
+        if(result == true){
+            return Ok("The selected expense was deleted");
         }
         else{
-            return $"Expense does not exist";
+            return BadRequest("Could not delete the selected expense");
         }
     }
 
-
-    /*-----------SUMAMRY EXPENSES-----------*/
-
-    [HttpGet("total-expenses")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<object> GetTotalExpenses(){
-        
-        //Get all expenses and calculate total, what is the most spending go to
-        IEnumerable<Expenses> myExpenses = repo.ListExpenses();
-
-        double totalExpenses = 0;
-        double theMostExpensivePurchasePrice = myExpenses.Max(expense => expense.Amount);
-        string theMostExpensivePurchaseName = myExpenses
-                                                .Where(expense => expense.Amount == theMostExpensivePurchasePrice)
-                                                .Select(expenses => expenses.Name)
-                                                .FirstOrDefault();
-
-        var ExpensesTypes = myExpenses.GroupBy(expense => expense.Type)
-                                                    .Select(group => new{
-                                                        Type = group.Key,
-                                                        typetotal = group.Sum(expense => expense.Amount)
-                                                       });
-        var BiggestSourceOfLoss = ExpensesTypes.OrderByDescending(expense => expense.typetotal);
-
-        //Define all expenses
-        myExpenses.ToList().ForEach(expense => totalExpenses += expense.Amount);
-
-        //Define most expensive purchase
-
-        //Define what category has the most spedning
-        
-        var expenseSummary = new {
-            TotalExpenses = "$" + totalExpenses.ToString(),
-            TheBiggestSpedningAmount = theMostExpensivePurchasePrice,
-            TheBiggestSpedningPurchaseName = theMostExpensivePurchaseName
-            
-            };
-
-        return Json(expenseSummary);
-    }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using budgettracker.data;
 
@@ -11,9 +12,11 @@ using budgettracker.data;
 namespace budgettracker.Migrations
 {
     [DbContext(typeof(BudgetContext))]
-    partial class BudgetContextModelSnapshot : ModelSnapshot
+    [Migration("20240417163515_Budget_v2")]
+    partial class Budget_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
