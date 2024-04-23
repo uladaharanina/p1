@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\reva_2024PROJECTS\\p1\\BudgetTrackerTest\\BudgetTrackerTest.csproj": {}
+    "F:\\reva_2024PROJECTS\\p1\\BudgettrackerTest\\BudgetTrackerTest.csproj": {}
   },
   "projects": {
-    "F:\\reva_2024PROJECTS\\p1\\BudgetTrackerTest\\BudgetTrackerTest.csproj": {
+    "F:\\reva_2024PROJECTS\\p1\\BudgettrackerTest\\BudgetTrackerTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\reva_2024PROJECTS\\p1\\BudgetTrackerTest\\BudgetTrackerTest.csproj",
+        "projectUniqueName": "F:\\reva_2024PROJECTS\\p1\\BudgettrackerTest\\BudgetTrackerTest.csproj",
         "projectName": "BudgetTrackerTest",
-        "projectPath": "F:\\reva_2024PROJECTS\\p1\\BudgetTrackerTest\\BudgetTrackerTest.csproj",
+        "projectPath": "F:\\reva_2024PROJECTS\\p1\\BudgettrackerTest\\BudgetTrackerTest.csproj",
         "packagesPath": "C:\\Users\\Wadew\\.nuget\\packages\\",
-        "outputPath": "F:\\reva_2024PROJECTS\\p1\\BudgetTrackerTest\\obj\\",
+        "outputPath": "F:\\reva_2024PROJECTS\\p1\\BudgettrackerTest\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Wadew\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -21,6 +21,7 @@ public class ExpenseController: Controller
         this.service = service;
     }
 
+
     /*---------LIST ALL EXPENSES----------*/
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]

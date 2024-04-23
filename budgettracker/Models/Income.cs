@@ -3,13 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class Income
 {
-    public Income(string name, string type, double amount)
-    {
-        Name = name;
-        Type = type;
-        Amount = amount;
-    }
-
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 

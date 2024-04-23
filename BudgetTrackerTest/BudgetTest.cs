@@ -429,11 +429,6 @@ public class UnitTest1
     public void TestAllInput(string name, string type, double amount, bool expectedResult){
 
         Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
-        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
-        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
-        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
-        Assert.Equal(expectedResult, Validator.ValidateAll(name, type, amount));
-
 
     }
 }
